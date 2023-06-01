@@ -1,0 +1,39 @@
+In this version of CLASS you can compute the cosmo observables for axion decay to photons with masses between 5 and 950 eV and couplings between 8e-12 and 1e-15. An exemplary ini file is provided, see:
+
+axion-LAST_ma75_ga2e-13_parameters.ini
+
+To pick the axion mass and coupling provide (carefull mDMdec shall be given in eV and gDMdec in 1/GeV):
+mDMdec = 75
+gDMdec = 2e-13
+
+
+The approach followed here leads to max 16% error in the calculation of the optical depth to reionization compared to using directly dark history (DH) ionization history (between z=0 and 3000).
+
+
+The efficiency tables fh300_,fexc300,fHion300,fHeion300,fcont300 as a fn of mass and coupling and at fixed z=300 are in:
+
+external/heating/axion_f300_gridforCLASS.dat.
+
+Let us emphasize that when the efficiencies were too high they could not be obtained from DH directly. We have fixed them to: fmax = {0.8000, 0.0500, 0.1300, 0.0100 , 0.01000}. Usually the corresponding models would anyway be largely excluded.
+
+They are taken into account using:
+
+f_eff_type = on_the_spot
+chi_type = from_axion_file
+
+The modified reionization history considered here uses the default model from Faucher-Giguere (implemented in DH) on the top of which DM decays can add extra ionization and can have some back reaction effects. We implement the modified reionization histories by interpolating a table of log10[ma[eV]] log10[gag[1/GeV]] 10 values of xe (at z=7.318,7.460,7.605,7.753,7.903,8.055,8.211,8.369,8.529,8.693). The latter redchifts are sufficient for a fair sampling of the corresponding reionization history. The table is in:
+
+external/heating/xe_fromDH_reggrid.dat
+
+To take these reionization histories into account in this modified version use:
+
+reio_parametrization = reio_inter
+reio_inter_num = 14
+reio_inter_z = 0.0, 3.0, 4.0,7.318,7.460,7.605,7.753,7.903,8.055,8.211,8.369,8.529,8.693,8.70169
+reio_inter_xe = -2.0, -2.0, -1.0,1.078,0.2154,0.05548,0.01522,0.003371,0.0006024,0.0002133,0.0001965,0.0001967,0.000197,0.0
+
+Notice that the only important input here is the number of redshift points, all other info is recomputed (I know I can make this better at some point...).
+
+
+Let us emphasize that when the efficiencies were too high the ionization history could not be obtained from DH directly. We have fixed them to: xemax = {1.081, 1.08, 1.08, 1.08, 1.08, 1.08, 1.079, 1.001, 1.001, 
+   1.001}; (see get-f300-forCLASS.nb)
